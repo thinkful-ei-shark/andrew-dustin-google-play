@@ -11,7 +11,7 @@ module.exports = [
       "Type": "Free",
       "Price": "0",
       "Content Rating": "Everyone 10+",
-      "Genres": "Adventure;Action & Adventure",
+      "Genres": "Action",
       "Last Updated": "July 31, 2018",
       "Current Ver": "2.347.225742",
       "Android Ver": "4.1 and up"

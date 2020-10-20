@@ -10,10 +10,18 @@ const app = express();
 app.use(morgan("dev"));
 
 app.use(cors());
-
+const validGenres = [
+  "Action",
+  "Puzzle",
+  "Strategy",
+  "Casual",
+  "Arcade",
+  "Card",
+];
 function handleGetApps(req, res) {
   const sort = req.query.sort;
-  console.log(sort)
+  const genre = req.query.genre;
+  console.log("sort", sort);
   let results = playStore;
   if (sort) {
     if (sort !== "rating" && sort !== "app") {
@@ -22,22 +30,33 @@ function handleGetApps(req, res) {
         .json({ error: "Can only sort by 'app' and 'rating'" });
     }
     if (sort === "app") {
-      results = results.sort((a,b) =>{ 
-        let textA=a.App.toLowerCase()
-        let textB=b.App.toLowerCase()
-        return (textA < textB) ? -1 : (textA> textB) ? 1: 0
-      });}
-      console.log("results after sort:", results)
+      results = results.sort((a, b) => {
+        let textA = a.App.toLowerCase();
+        let textB = b.App.toLowerCase();
+        return textA < textB ? -1 : textA > textB ? 1 : 0;
+      });
     }
+    if (sort === "rating") {
+      results = results.sort((a, b) => {
+        let textA = a.Rating;
+        let textB = b.Rating;
+        return textA < textB ? -1 : textA > textB ? 1 : 0;
+      });
+    }
+    console.log("results after sort:", results);
+  }
+  if (genre) {
+    if (validGenres.includes(genre)) {
+      results = results.filter((x) => x.Genres === genre)
+      console.log('results', results);
+    } else {
+      return res
+        .status(400)
+        .json({ error: `valid genres: ${validGenres}` });
+    }
+  }
 
-    if(sort === "rating"){
-      results = results.sort((a,b)=>{
-        let textA=a.Rating.toLowerCase()
-        let textB=a.Rating.toLowerCase()
-        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0
-      });}
-  
-  res.json(results)
+  res.json(results);
 }
 app.get("/apps", handleGetApps);
 
