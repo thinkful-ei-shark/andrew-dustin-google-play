@@ -29,6 +29,13 @@ function handleGetApps(req, res) {
       });}
       console.log("results after sort:", results)
     }
+
+    if(sort === "rating"){
+      results = results.sort((a,b)=>{
+        let textA=a.Rating.toLowerCase()
+        let textB=a.Rating.toLowerCase()
+        return (textA < textB) ? -1 : (textA > textB) ? 1 : 0
+      });}
   
   res.json(results)
 }
